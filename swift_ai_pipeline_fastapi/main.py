@@ -4,7 +4,7 @@ from fastapi import FastAPI, HTTPException, Query, UploadFile, File
 from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
 import io, json, pandas as pd, tempfile, asyncio
-from utils import sr_ai_parser, mt_parser, ai_comparator
+from utils import  mt_parser, ai_comparator,sr_ai_parser2
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -29,7 +29,7 @@ async def parse_rules_from_year(year: int = Query(...), mt_list: List[str] = Que
         raise HTTPException(status_code=404, detail=f"{filename} not found")
 
     # Just pass the string path
-    rules = await sr_ai_parser.extract_changes_from_pdf(filepath, mt_list)
+    rules = await sr_ai_parser2.extract_changes_from_pdf(filepath, mt_list)
     return {"rules": rules, "count": len(rules)}
     #return rules
 

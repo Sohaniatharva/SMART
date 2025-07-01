@@ -8,6 +8,7 @@ from typing import List, Dict
 from dotenv import load_dotenv
 import fitz  # PyMuPDF
 from openai import AsyncOpenAI
+from utils.db import collection  
 
 load_dotenv()
 
@@ -37,29 +38,57 @@ def extract_text_from_pdf(pdf_path: str) -> str:
 
 async def extract_changes_from_pdf(pdf_path: str, mt_list: List[str]) -> List[Dict]:
     text = extract_text_from_pdf(pdf_path)
-    mt_str = ", ".join(mt_list)
+    all_changes = []
 
-    # Fill the updated prompt with both release text and MT list
-    prompt = _PROMPT_TEMPLATE.format(text=text, mt_list=mt_str)
+    for mt_type in mt_list:
+        # Check cache
+        cached = get_cached_rules(mt_type)
+        if cached:
+            print(f"Using cached rules for MT{mt_type}")
+            all_changes.extend(cached)
+            continue
 
-    try:
-        response = await client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are an expert in SWIFT message compliance."},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=0.3,
-            max_tokens=3000,
-        )
-        print(response.model_dump_json())  # Use model_dump_json() if response is a Pydantic model
-        content = response.choices[0].message.content or ""
-        raw = content.strip()
-        # Remove triple backticks if present
-        cleaned = re.sub(r"^```(?:json)?|```$", "", raw, flags=re.MULTILINE).strip()
-        return json.loads(cleaned)
-    except Exception as e:
-        return [{"error": str(e)}]
+        # Not in cache, run OpenAI
+        prompt = _PROMPT_TEMPLATE.format(text=text, mt_list=mt_type)
+
+        try:
+            response = await client.chat.completions.create(
+                model="gpt-4o",
+                messages=[
+                    {"role": "system", "content": "You are an expert in SWIFT message compliance."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.3,
+                max_tokens=2000,
+            )
+            content = response.choices[0].message.content or ""
+            cleaned = re.sub(r"^```(?:json)?|```$", "", content.strip(), flags=re.MULTILINE).strip()
+            parsed = json.loads(cleaned)
+
+            if isinstance(parsed, list):
+                cache_rules(mt_type, parsed)
+                all_changes.extend(parsed)
+            else:
+                error_entry = {"mt_type": mt_type, "error": "Unexpected format in response"}
+                all_changes.append(error_entry)
+        except Exception as e:
+            all_changes.append({"mt_type": mt_type, "error": str(e)})
+
+    return all_changes
+
+def get_cached_rules(mt_type: str) -> List[Dict]:
+    result = collection.find_one({"mt_type": mt_type})
+    if result and "rules" in result:
+        return result["rules"]
+    return []
+
+
+def cache_rules(mt_type: str, rules: List[Dict]) -> None:
+    collection.update_one(
+        {"mt_type": mt_type},
+        {"$set": {"rules": rules}},
+        upsert=True
+    )
 
 def save_changes_to_csv(changes: List[Dict], filename: str = "sr2024_changes.csv") -> str:
     keys = ["mt_type", "field", "change_description", "cr_id", "impact"]

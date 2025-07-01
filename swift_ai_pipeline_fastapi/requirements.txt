@@ -8,4 +8,6 @@ pytest
 python-dotenv
 pytest-asyncio
 pymupdf
+pymongo 
+motor
 
