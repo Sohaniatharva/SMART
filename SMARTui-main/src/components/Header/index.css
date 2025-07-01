@@ -1,0 +1,28 @@
+.appHeader{
+    background-color: white;
+    width: 100vw;
+    height: 75px;
+    margin: 10px 0px 5px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    box-sizing: border-box;
+    padding-left: 20px;
+    gap: 40px;
+}
+.appName{
+    color: #000000;
+    font-size: 30px;
+    line-height: 28px;
+    padding-top: 2px;
+    letter-spacing: 4px;
+    font-weight: 600 ;
+}
+.appFullName{
+    font-size: 10px;
+    margin-top: 1px;
+    font-weight: 500;
+}
+.ubsLogo{
+    height: 40px;
+}

@@ -1,0 +1,265 @@
+.ValiudateMsgPopupContainer{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 15;
+    /* border: 5px solid #000; */
+    box-sizing: border-box;
+
+}
+.ValiudateMsgPopup{
+    width: 93%;
+    height: 99%;
+    background-color: rgb(212, 212, 212);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    /* border: 2px solid #7a1e1e; */
+}
+.header{
+    width: 100%;
+    height: 50px;
+    padding: 0px 10px;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.5em;
+    font-weight: bold;
+    /* border: 2px solid #09d2ff; */
+    box-sizing: border-box;
+}
+
+.headerInfo{
+    height: 35px;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.static{
+    font-size: 20px;
+    font-weight: 700;
+}
+.dynamic{
+    font-size: 25px;
+    font-weight: 700;
+    color: #E60000;
+    margin: 0 30px 0 15px;
+}
+.clsbtn{
+    all: unset;
+    width: 30px;
+    height: 30px;
+    background-color: #ffffff;
+    font-size: 26px;
+    line-height: 1px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    color: rgb(166, 1, 1);
+    border: 2px solid #7e0000;
+    cursor: pointer;
+    text-align: center;
+}
+.clsbtn:hover{
+    transform: scale(1.1);
+}
+.clsbtn:active{
+    transform: scale(0.9);
+
+}
+
+
+.Comparebody{
+    width: 100%;
+    height: calc(100% - 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* border: 2px solid #7a1e1e; */
+    box-sizing: border-box;
+
+}
+
+.MsgInput,  .MsgOutput{
+    height: 100%;
+    font-size: 1.2em;
+    /* border: 3px solid #ccc; */
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+.MsgInput{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 5px;
+    padding: 0px 5px;
+}
+.MsgOutput{
+    width: 70%;
+    background-color: white;
+    margin: 0px 15px
+}
+
+.msgInputTArea{
+    width: 100%;
+    height: calc(100% - 50px);
+    padding: 10px;
+    font-size: 1.2em;
+    border: 3px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    resize: none;
+}
+.msgInputTArea::placeholder{
+    font-size: 25px;
+    font-weight: 700;
+    line-height: 100px;
+    color: rgba(121, 48, 48, 0.541);
+    padding-left: 10px;
+}
+.btnAndNoteContainer{
+    width: 100%;
+    height: 50px;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+.errnote{
+    width: 100%;
+    height: 90%;
+    display: flex;
+    font-size: 16px;
+    font-weight: 500;
+    justify-content: baseline;
+    padding-left: 10px;
+    align-items: center;
+    color: red;
+}
+.SubDtn{
+    all: unset;
+    width : 100px;
+    height: 40px;
+    margin: 5px;
+    background-color: #E60000;
+    font-size: 18px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+}
+.SubDtn:hover{
+    background-color: #cc0000;
+}
+.SubDtn:active{
+    background-color: #a80000;
+}
+.NoResult{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3em;
+    font-weight: bold;
+    color: #b25a5a71;
+    text-align: center;
+}
+.gotResult{
+    width: 100%;
+    height: 100%;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 3em;
+    font-weight: bold;
+    text-align: center;
+    overflow-y: scroll;
+    box-sizing: border-box;
+}
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------ */
+.dlbtnContainer{
+    margin: 50px 0 20px 0;
+    font-size: 16px;
+    font-weight: 500;
+}
+.box{
+    background-color: #E60000;
+    margin: 0 5px;
+    padding: 2px 8px;
+}
+.dlBtn{
+    all: unset;
+    width : 200px;
+    height: 40px;
+    margin: 5px;
+    background-color: #E60000;
+    font-size: 18px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+}
+.dlBtn:hover{
+    background-color: #cc0000;
+}
+.dlBtn:active{
+    background-color: #a80000;
+}
+.resultTable{
+    width: 97%;
+    border-collapse: collapse;
+    border: 2px solid #E60000;
+    box-sizing: border-box;
+    margin-bottom: 100px;
+}
+
+.resultTable th{
+background-color: #E60000;
+color: white;
+border: none;
+}
+.resultTable th, .resultTable td{
+    border: 1px solid #000000;
+    padding: 10px 20px 10px 10px;
+    text-align: left;
+    max-width: 400px;
+    box-sizing: border-box;
+
+}
+
+.resultTable th {
+    border: 1px solid #000000;
+    font-size: 20px;
+}
+
+.resultTable td {
+    font-size: 16px;
+}
+
+
+
+@media print {
+    .resultTable tr{
+        page-break-inside: avoid;
+    }
+
+}

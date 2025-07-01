@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+openai
+pdfplumber
+pandas
+python-multipart
+pytest
+python-dotenv
+pytest-asyncio
+pymupdf
+

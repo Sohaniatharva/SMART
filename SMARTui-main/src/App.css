@@ -1,0 +1,13 @@
+body, #root {
+  background-color: #dbdbdb;
+}
+.appBody{
+    display: flex;
+}
+.mainArea{
+    display: inline-block;
+    width: calc(100vw - 260px);
+    height: calc(100vh - 105px);
+    margin: 5px 10px 10px 5px;
+    background-color: white;
+}
