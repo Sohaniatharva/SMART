@@ -33,7 +33,7 @@ _PROMPT_TEMPLATE = (
 
 def extract_text_from_pdf(pdf_path: str) -> str:
     doc = fitz.open(pdf_path)
-    return "\n".join(page.get_text() for page in doc)
+    return "\n".join(page.get_text() for page in doc.pages())
 
 async def extract_changes_from_pdf(pdf_path: str, mt_list: List[str]) -> List[Dict]:
     text = extract_text_from_pdf(pdf_path)
@@ -52,8 +52,9 @@ async def extract_changes_from_pdf(pdf_path: str, mt_list: List[str]) -> List[Di
             temperature=0.3,
             max_tokens=3000,
         )
-        print(response.json())
-        raw = response.choices[0].message.content.strip()
+        print(response.model_dump_json())  # Use model_dump_json() if response is a Pydantic model
+        content = response.choices[0].message.content or ""
+        raw = content.strip()
         # Remove triple backticks if present
         cleaned = re.sub(r"^```(?:json)?|```$", "", raw, flags=re.MULTILINE).strip()
         return json.loads(cleaned)

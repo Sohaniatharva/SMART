@@ -14,11 +14,11 @@ class CompareRequest(BaseModel):
     mt_message: str
     rules: List[Dict[str, Any]]
 
-@app.post("/parse-rules")
-async def parse_rules(pdf: UploadFile = File(...), mt_list: List[str] = Query(...)):
-    pdf_bytes = await pdf.read()
-    rules = await sr_ai_parser.extract_changes_from_pdf(pdf_bytes, mt_list)
-    return {"rules": rules, "count": len(rules)}
+# @app.post("/parse-rules")
+# async def parse_rules(pdf: UploadFile = File(...), mt_list: List[str] = Query(...)):
+#     pdf_bytes = await pdf.read()
+#     rules = await sr_ai_parser.extract_changes_from_pdf(pdf_bytes, mt_list)
+#     return {"rules": rules, "count": len(rules)}
 
 @app.get("/parse-rules-from-year")
 async def parse_rules_from_year(year: int = Query(...), mt_list: List[str] = Query(...)):

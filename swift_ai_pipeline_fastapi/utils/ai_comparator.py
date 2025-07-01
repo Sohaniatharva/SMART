@@ -39,7 +39,10 @@ async def compare(fields: Dict[str, str], rules: List[Dict[str, Any]]) -> List[D
             max_tokens=500,
         )
         # print("Response JSON:", resp.json())
-        raw = resp.choices[0].message.content.strip()
+        content = resp.choices[0].message.content
+        if content is None:
+            return [{"error": "no_content", "details": "No content returned from OpenAI API."}]
+        raw = content.strip()
         # # Remove triple backticks if present
         cleaned = re.sub(r"^```(?:json)?|```$", "", raw, flags=re.MULTILINE).strip()
         return json.loads(cleaned)
