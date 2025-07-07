@@ -1,4 +1,3 @@
-
 import os
 from fastapi import FastAPI, HTTPException, Query, UploadFile, File
 from pydantic import BaseModel
@@ -35,7 +34,17 @@ async def parse_rules_from_year(year: int = Query(...), mt_list: List[str] = Que
 
 @app.get("/compare")
 async def compare(mt_msg: str = Query(..., description="Paste full MT message including all tags")):
+    # Parse MT message
     fields, mt_type = mt_parser.parse_mt_message(mt_msg)
-    # diffs = await ai_comparator.compare(fields, req.rules)
-    #return {"message_type": mt_type, "diffs": diffs}
-    return {"message_type": mt_type, "fields": fields}
+    
+    # Fetch cached rules for that MT type
+    rules = sr_ai_parser2.get_cached_rules(mt_type)
+    
+    print(fields)
+    if not rules:
+        raise HTTPException(status_code=404, detail=f"No cached rules found for MT{mt_type}. Please call /parse-rules-from-year first.")
+
+    # Compare using AI comparator
+    diffs = await ai_comparator.compare(fields, rules)
+    return {"message_type": mt_type, "diffs": diffs}
+

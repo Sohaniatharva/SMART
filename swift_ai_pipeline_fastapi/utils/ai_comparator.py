@@ -26,25 +26,33 @@ _PROMPT = (
 )
 
 async def compare(fields: Dict[str, str], rules: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    text = _PROMPT.format(rules=json.dumps(rules), fields=json.dumps(fields))
+    present_fields = set(fields.keys())
+    filtered_rules = [rule for rule in rules if rule["field"] in present_fields]
+    print("Filtered rules:", filtered_rules)
+
+    if not filtered_rules:
+        return [{"info": "no_applicable_rules", "details": "No rules matched the message fields"}]
+
+    text = _PROMPT.format(rules=json.dumps(filtered_rules), fields=json.dumps(fields))
 
     try:
         resp = await client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4o",
             messages=[
                 {"role": "system", "content": "You are a SWIFT compliance assistant."},
                 {"role": "user", "content": text}
             ],
-            temperature=0.0,
-            max_tokens=500,
+            temperature=0.3,
+            max_tokens=3000,
         )
-        # print("Response JSON:", resp.json())
+        print("Response JSON:", resp.json())
         content = resp.choices[0].message.content
         if content is None:
             return [{"error": "no_content", "details": "No content returned from OpenAI API."}]
         raw = content.strip()
         # # Remove triple backticks if present
         cleaned = re.sub(r"^```(?:json)?|```$", "", raw, flags=re.MULTILINE).strip()
+        print("Cleaned response:", cleaned)
         return json.loads(cleaned)
 
     # ——— Catch common OpenAI errors ——— #

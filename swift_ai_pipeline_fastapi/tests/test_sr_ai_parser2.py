@@ -7,7 +7,7 @@ client = TestClient(app)
 def test_parse_rules_from_year():
     response = client.get(
         "/parse-rules-from-year",
-        params={"year": 2024, "mt_list": ["306"]}
+        params={"year": 2024, "mt_list": ["306","540"]}
     )
 
     print("Status Code:", response.status_code)

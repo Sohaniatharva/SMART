@@ -22,15 +22,17 @@ _PROMPT_TEMPLATE = (
     "For each relevant change, return an item in a pure JSON list with the following exact keys and order:\n"
     "- mt_type (string): Only numeric MT type (e.g., '306')\n"
     "- field (string): Only the field tag (e.g., '22U'). If multiple fields are mentioned, return one item per field.\n"
-    "- change_description (string): A short, focused description of the specific change (e.g., 'Deleted code ACLA')\n"
+    "- change_description (string): A clear, actionable compliance rule (e.g., 'If 17B is RSCH, then 70E must contain justification text')\n"
     "- cr_id (string): Change Request ID if available, otherwise an empty string\n"
     "- impact (string): One of 'Low', 'Medium', or 'High'\n\n"
     "ONLY return changes where mt_type is in this list: {mt_list}\n\n"
     "STRICT OUTPUT FORMAT:\n"
     "- Return ONLY a JSON list (no commentary, no markdown)\n"
-    "- Keep descriptions concise and meaningful\n\n"
+    "- Describe precise rule or format requirements — not summaries\n"
+    "- Avoid vague descriptions like 'updated rules' or 'clarified usage'\n\n"
     "Release Notes:\n\"\"\"\n{text}\n\"\"\""
 )
+
 
 def extract_text_from_pdf(pdf_path: str) -> str:
     doc = fitz.open(pdf_path)
