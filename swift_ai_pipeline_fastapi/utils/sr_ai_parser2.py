@@ -20,7 +20,7 @@ _PROMPT_TEMPLATE = (
     "From the SR2024 release notes, extract only the changes that relate to the specified MT message types.\n"
     "Ignore all unrelated changes.\n"
     "For each relevant change, return an item in a pure JSON list with the following exact keys and order:\n"
-    "- mt_type (string): Only numeric MT type (e.g., '306')\n"
+    "- mt_type (string): MT type (e.g., 'MT306')\n"
     "- field (string): Only the field tag (e.g., '22U'). If multiple fields are mentioned, return one item per field.\n"
     "- change_description (string): A clear, actionable compliance rule (e.g., 'If 17B is RSCH, then 70E must contain justification text')\n"
     "- cr_id (string): Change Request ID if available, otherwise an empty string\n"
@@ -46,8 +46,8 @@ async def extract_changes_from_pdf(pdf_path: str, mt_list: List[str]) -> List[Di
         # Check cache
         cached = get_cached_rules(mt_type)
         if cached:
-            print(f"Using cached rules for MT{mt_type}")
-            all_changes.extend(cached)
+            print(f"Using cached rules for {mt_type}")
+            all_changes.append({"mt_msg": mt_type, "rules": cached})
             continue
 
         # Not in cache, run OpenAI
@@ -69,13 +69,12 @@ async def extract_changes_from_pdf(pdf_path: str, mt_list: List[str]) -> List[Di
 
             if isinstance(parsed, list):
                 cache_rules(mt_type, parsed)
-                all_changes.extend(parsed)
+                all_changes.append({"mt_msg": mt_type, "rules": parsed})
             else:
                 error_entry = {"mt_type": mt_type, "error": "Unexpected format in response"}
                 all_changes.append(error_entry)
         except Exception as e:
             all_changes.append({"mt_type": mt_type, "error": str(e)})
-
     return all_changes
 
 def get_cached_rules(mt_type: str) -> List[Dict]:

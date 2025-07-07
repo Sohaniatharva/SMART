@@ -29,8 +29,9 @@ async def parse_rules_from_year(year: int = Query(...), mt_list: List[str] = Que
 
     # Just pass the string path
     rules = await sr_ai_parser2.extract_changes_from_pdf(filepath, mt_list)
-    return {"rules": rules, "count": len(rules)}
-    #return rules
+    # return {"rules": rules, "count": len(rules)}
+    print( "Extracted rules:", json.dumps(rules, indent=2))
+    return rules
 
 @app.get("/compare")
 async def compare(mt_msg: str = Query(..., description="Paste full MT message including all tags")):
